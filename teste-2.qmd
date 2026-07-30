@@ -161,5 +161,3 @@ ensemble_raster <- rast("A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_t
 plot(ensemble_raster)
 
 ```
-
-

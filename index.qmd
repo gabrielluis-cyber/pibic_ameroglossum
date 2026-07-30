@@ -4,7 +4,8 @@ title: "PIBIC AMEROGLOSSUM"
 
 Este site foi criado para comunicar o avanço do PIBIC de GABRIEL LIMA
 
-Segue o Script do teste 2 (finalizado em 28/07/2026):
+Segue o Script do teste 2 (finalizado em 28/07/2026): [TESTE2](teste-2.qmd)
+
 
 ```{r}
 1 + 1
