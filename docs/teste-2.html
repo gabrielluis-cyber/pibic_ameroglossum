@@ -175,6 +175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p>Inicialmente, precisamos carregar os pacotes requeridos:</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Mostrar script</summary>
@@ -183,6 +184,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2</code></pre>
 </div>
+</div>
+<div class="cell">
 <details class="code-fold">
 <summary>Mostrar script</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"terra"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -378,48 +381,72 @@ Os seguintes objetos são mascarados por 'package:base':
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"randomForest"</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"maxnet"</span>)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/faculdade/Teste_biomod2_parte_2"</span>)</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Dados em CSV e troca de "," para "."</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ameroglossum.csv"</span>)</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum<span class="sc">$</span>long <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>, <span class="st">"."</span>, dados_ameroglossum<span class="sc">$</span>long))</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum<span class="sc">$</span>lat  <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>, <span class="st">"."</span>, dados_ameroglossum<span class="sc">$</span>lat))</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Definindo variáveis (raster's definidos)</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>bio1 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_1.tif"</span>)</span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>bio4 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_4.tif"</span>)</span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>bio7 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_7.tif"</span>)</span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>bio12 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_12.tif"</span>)</span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>elev <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_elev.tif"</span>)</span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="co">#Psudoausências</span></span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>PA.nb.rep <span class="ot">=</span> <span class="dv">3</span></span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>PA.nb.absences <span class="ot">=</span> <span class="dv">3000</span></span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>PA.strategy <span class="ot">=</span> <span class="st">"random"</span></span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Resp.var e Resp.xy (Objetos de presença e localidade)</span></span>
-<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>resp.var <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">nrow</span>(dados_ameroglossum))</span>
-<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>resp.xy <span class="ot">&lt;-</span> dados_ameroglossum[,<span class="fu">c</span>(<span class="st">"long"</span>,<span class="st">"lat"</span>)]</span>
-<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenando variáveis</span></span>
-<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>variaveis <span class="ot">&lt;-</span> <span class="fu">c</span>(bio1, bio4, bio7, bio12, elev)</span>
-<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando objeto de teste</span></span>
-<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>testebio24 <span class="ot">&lt;-</span> <span class="fu">BIOMOD_FormatingData</span>(</span>
-<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.var =</span> resp.var,</span>
-<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">expl.var =</span> variaveis,</span>
-<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.xy =</span> resp.xy,</span>
-<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.name =</span> <span class="st">"A.Pernambucense teste 2"</span>,</span>
-<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.nb.rep =</span> <span class="dv">3</span>,</span>
-<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.nb.absences =</span> <span class="dv">3000</span>,</span>
-<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.strategy =</span> <span class="st">"random"</span>,</span>
-<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/faculdade/Teste_biomod2_parte_2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Devido ao excel/sheets trabalharem com “,”; se torn necessário um passo extra:</p>
+<p>Trocar as vírgulas por pontos na tabela</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Mostrar script</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dados em CSV e troca de "," para "."</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ameroglossum.csv"</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum<span class="sc">$</span>long <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>, <span class="st">"."</span>, dados_ameroglossum<span class="sc">$</span>long))</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum<span class="sc">$</span>lat  <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>, <span class="st">"."</span>, dados_ameroglossum<span class="sc">$</span>lat))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Aqui, carregamos as variáveis bioclimáticas que farão parte do teste, junto à variável de elevação, todas fornecidas pelo WorldClim.</p>
+<p>São elas:</p>
+<p>BIO1 = Temperatura média anual BIO4 = Sazonalidade da temperatura (desvio padrão × 100) BIO7 = Amplitude térmica anual (BIO5-BIO6) BIO12 = Precipitação Anual</p>
+<p>Todos são entregues como arquivos geotif (raster). A resolução utilizada foi a menor, de 10minutos. Não é necessário uma resolução maior para um teste de script.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Mostrar script</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definindo variáveis (raster's definidos)</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>bio1 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_1.tif"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>bio4 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_4.tif"</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>bio7 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_7.tif"</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>bio12 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_12.tif"</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>elev <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_elev.tif"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Aqui definimos quantas pseudoausências serão calculadas, quantas repetições serão feitas e definimos a estratégia como aleatória para o cálculo de pseudoausências.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Mostrar script</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Psudoausências</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>PA.nb.rep <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>PA.nb.absences <span class="ot">=</span> <span class="dv">3000</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>PA.strategy <span class="ot">=</span> <span class="st">"random"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Aqui vamos definir os objetos</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Mostrar script</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resp.var e Resp.xy (Objetos de presença e localidade)</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>resp.var <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">nrow</span>(dados_ameroglossum))</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>resp.xy <span class="ot">&lt;-</span> dados_ameroglossum[,<span class="fu">c</span>(<span class="st">"long"</span>,<span class="st">"lat"</span>)]</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenando variáveis</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>variaveis <span class="ot">&lt;-</span> <span class="fu">c</span>(bio1, bio4, bio7, bio12, elev)</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando objeto de teste</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>testebio24 <span class="ot">&lt;-</span> <span class="fu">BIOMOD_FormatingData</span>(</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.var =</span> resp.var,</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">expl.var =</span> variaveis,</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.xy =</span> resp.xy,</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.name =</span> <span class="st">"A.Pernambucense teste 2"</span>,</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.nb.rep =</span> <span class="dv">3</span>,</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.nb.absences =</span> <span class="dv">3000</span>,</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.strategy =</span> <span class="st">"random"</span>,</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -470,17 +497,17 @@ Some data is located in the same raster cell. Please set 'filter.raster = TRUE' 
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelando com GLM, GAM, RF e MaxEnt</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>testebio24_glm <span class="ot">&lt;-</span> <span class="fu">BIOMOD_Modeling</span>(</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.format=</span>testebio24,</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">modeling.id =</span> <span class="st">"teste 1, 4, 7, 12, elev"</span>,</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">models =</span> <span class="fu">c</span>(<span class="st">"GLM"</span>, <span class="st">"GAM"</span>, <span class="st">"RF"</span>, <span class="st">"MAXNET"</span>),</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.strategy =</span> <span class="st">"random"</span>,</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.nb.rep =</span> <span class="dv">3</span>,</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.perc =</span> <span class="fl">0.75</span>,</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.eval =</span> <span class="fu">c</span> (<span class="st">"TSS"</span>, <span class="st">"AUCroc"</span>, <span class="st">"AUCprg"</span>),</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">var.import =</span> <span class="dv">10</span></span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelando com GLM, GAM, RF e MaxEnt</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>testebio24_glm <span class="ot">&lt;-</span> <span class="fu">BIOMOD_Modeling</span>(</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.format=</span>testebio24,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">modeling.id =</span> <span class="st">"teste 1, 4, 7, 12, elev"</span>,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">models =</span> <span class="fu">c</span>(<span class="st">"GLM"</span>, <span class="st">"GAM"</span>, <span class="st">"RF"</span>, <span class="st">"MAXNET"</span>),</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.strategy =</span> <span class="st">"random"</span>,</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.nb.rep =</span> <span class="dv">3</span>,</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.perc =</span> <span class="fl">0.75</span>,</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.eval =</span> <span class="fu">c</span> (<span class="st">"TSS"</span>, <span class="st">"AUCroc"</span>, <span class="st">"AUCprg"</span>),</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">var.import =</span> <span class="dv">10</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -533,6 +560,9 @@ Total number of model runs : 36
 -=-=-=--=-=-=- A.Pernambucense.teste.2_PA1_RUN1_GLM 
 
  Running model...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: glm.fit: algoritmo não convergiu</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></pre>
@@ -992,7 +1022,8 @@ Total number of model runs : 36
  Running model...</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></pre>
+<pre><code>Warning: glm.fit: algoritmo não convergiu
+Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -1449,7 +1480,8 @@ Total number of model runs : 36
  Running model...</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></pre>
+<pre><code>Warning: glm.fit: algoritmo não convergiu
+Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -1906,9 +1938,6 @@ Total number of model runs : 36
  Running model...</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: glm.fit: algoritmo não convergiu</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
 <pre><code>Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -2023,14 +2052,7 @@ Total number of model runs : 36
 
 -=-=-=--=-=-=- A.Pernambucense.teste.2_PA2_RUN1_GAM 
 
- Running model...</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,
-: Iteration limit reached without full convergence - check carefully</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
+ Running model...
  Getting predictions...
  Getting model evaluation...
  Getting variables' importance...
@@ -2824,8 +2846,7 @@ Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></
  Running model...</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: glm.fit: algoritmo não convergiu
-Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></pre>
+<pre><code>Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -3396,14 +3417,7 @@ Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></
 
 -=-=-=--=-=-=- A.Pernambucense.teste.2_PA3_RUN1_GAM 
 
- Running model...</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,
-: Iteration limit reached without full convergence - check carefully</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
+ Running model...
  Getting predictions...
  Getting model evaluation...
  Getting variables' importance...
@@ -4196,7 +4210,8 @@ Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></
  Running model...</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></pre>
+<pre><code>Warning: glm.fit: algoritmo não convergiu
+Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -4310,7 +4325,14 @@ Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></
 
 -=-=-=--=-=-=- A.Pernambucense.teste.2_PA3_RUN3_GAM 
 
- Running model...
+ Running model...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,
+: Iteration limit reached without full convergence - check carefully</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
  Getting predictions...
  Getting model evaluation...
  Getting variables' importance...
@@ -4645,239 +4667,239 @@ Warning: glm.fit: probabilidades ajustadas numericamente 0 ou 1 ocorreu</code></
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vendo os resultados</span></span>
-<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_evaluations</span>(testebio24_glm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vendo os resultados</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_evaluations</span>(testebio24_glm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                  full.name  PA  run   algo metric.eval cutoff
-1      A.Pernambucense.teste.2_PA1_RUN1_GLM PA1 RUN1    GLM         TSS  869.0
-2      A.Pernambucense.teste.2_PA1_RUN1_GLM PA1 RUN1    GLM      AUCroc  870.0
-3      A.Pernambucense.teste.2_PA1_RUN1_GLM PA1 RUN1    GLM      AUCprg  969.0
-4      A.Pernambucense.teste.2_PA1_RUN1_GAM PA1 RUN1    GAM         TSS  929.0
-5      A.Pernambucense.teste.2_PA1_RUN1_GAM PA1 RUN1    GAM      AUCroc  926.5
-6      A.Pernambucense.teste.2_PA1_RUN1_GAM PA1 RUN1    GAM      AUCprg  965.0
-7       A.Pernambucense.teste.2_PA1_RUN1_RF PA1 RUN1     RF         TSS  465.0
-8       A.Pernambucense.teste.2_PA1_RUN1_RF PA1 RUN1     RF      AUCroc  466.0
-9       A.Pernambucense.teste.2_PA1_RUN1_RF PA1 RUN1     RF      AUCprg  662.0
-10  A.Pernambucense.teste.2_PA1_RUN1_MAXNET PA1 RUN1 MAXNET         TSS   96.0
-11  A.Pernambucense.teste.2_PA1_RUN1_MAXNET PA1 RUN1 MAXNET      AUCroc  206.0
-12  A.Pernambucense.teste.2_PA1_RUN1_MAXNET PA1 RUN1 MAXNET      AUCprg  434.0
-13     A.Pernambucense.teste.2_PA1_RUN2_GLM PA1 RUN2    GLM         TSS  833.0
-14     A.Pernambucense.teste.2_PA1_RUN2_GLM PA1 RUN2    GLM      AUCroc  836.0
-15     A.Pernambucense.teste.2_PA1_RUN2_GLM PA1 RUN2    GLM      AUCprg  963.0
-16     A.Pernambucense.teste.2_PA1_RUN2_GAM PA1 RUN2    GAM         TSS  904.0
-17     A.Pernambucense.teste.2_PA1_RUN2_GAM PA1 RUN2    GAM      AUCroc  901.5
-18     A.Pernambucense.teste.2_PA1_RUN2_GAM PA1 RUN2    GAM      AUCprg  960.0
-19      A.Pernambucense.teste.2_PA1_RUN2_RF PA1 RUN2     RF         TSS  465.0
-20      A.Pernambucense.teste.2_PA1_RUN2_RF PA1 RUN2     RF      AUCroc  466.0
-21      A.Pernambucense.teste.2_PA1_RUN2_RF PA1 RUN2     RF      AUCprg  640.0
-22  A.Pernambucense.teste.2_PA1_RUN2_MAXNET PA1 RUN2 MAXNET         TSS   92.0
-23  A.Pernambucense.teste.2_PA1_RUN2_MAXNET PA1 RUN2 MAXNET      AUCroc  210.0
-24  A.Pernambucense.teste.2_PA1_RUN2_MAXNET PA1 RUN2 MAXNET      AUCprg  409.0
-25     A.Pernambucense.teste.2_PA1_RUN3_GLM PA1 RUN3    GLM         TSS  894.0
-26     A.Pernambucense.teste.2_PA1_RUN3_GLM PA1 RUN3    GLM      AUCroc  891.5
-27     A.Pernambucense.teste.2_PA1_RUN3_GLM PA1 RUN3    GLM      AUCprg  948.0
-28     A.Pernambucense.teste.2_PA1_RUN3_GAM PA1 RUN3    GAM         TSS  879.0
-29     A.Pernambucense.teste.2_PA1_RUN3_GAM PA1 RUN3    GAM      AUCroc  876.0
-30     A.Pernambucense.teste.2_PA1_RUN3_GAM PA1 RUN3    GAM      AUCprg  946.0
+1      A.Pernambucense.teste.2_PA1_RUN1_GLM PA1 RUN1    GLM         TSS  788.0
+2      A.Pernambucense.teste.2_PA1_RUN1_GLM PA1 RUN1    GLM      AUCroc  790.5
+3      A.Pernambucense.teste.2_PA1_RUN1_GLM PA1 RUN1    GLM      AUCprg  973.0
+4      A.Pernambucense.teste.2_PA1_RUN1_GAM PA1 RUN1    GAM         TSS  621.0
+5      A.Pernambucense.teste.2_PA1_RUN1_GAM PA1 RUN1    GAM      AUCroc  620.5
+6      A.Pernambucense.teste.2_PA1_RUN1_GAM PA1 RUN1    GAM      AUCprg  991.0
+7       A.Pernambucense.teste.2_PA1_RUN1_RF PA1 RUN1     RF         TSS  429.0
+8       A.Pernambucense.teste.2_PA1_RUN1_RF PA1 RUN1     RF      AUCroc  427.0
+9       A.Pernambucense.teste.2_PA1_RUN1_RF PA1 RUN1     RF      AUCprg  638.0
+10  A.Pernambucense.teste.2_PA1_RUN1_MAXNET PA1 RUN1 MAXNET         TSS  150.5
+11  A.Pernambucense.teste.2_PA1_RUN1_MAXNET PA1 RUN1 MAXNET      AUCroc  163.5
+12  A.Pernambucense.teste.2_PA1_RUN1_MAXNET PA1 RUN1 MAXNET      AUCprg  387.0
+13     A.Pernambucense.teste.2_PA1_RUN2_GLM PA1 RUN2    GLM         TSS  874.0
+14     A.Pernambucense.teste.2_PA1_RUN2_GLM PA1 RUN2    GLM      AUCroc  874.0
+15     A.Pernambucense.teste.2_PA1_RUN2_GLM PA1 RUN2    GLM      AUCprg  976.0
+16     A.Pernambucense.teste.2_PA1_RUN2_GAM PA1 RUN2    GAM         TSS  667.0
+17     A.Pernambucense.teste.2_PA1_RUN2_GAM PA1 RUN2    GAM      AUCroc  666.5
+18     A.Pernambucense.teste.2_PA1_RUN2_GAM PA1 RUN2    GAM      AUCprg  986.0
+19      A.Pernambucense.teste.2_PA1_RUN2_RF PA1 RUN2     RF         TSS  444.0
+20      A.Pernambucense.teste.2_PA1_RUN2_RF PA1 RUN2     RF      AUCroc  448.0
+21      A.Pernambucense.teste.2_PA1_RUN2_RF PA1 RUN2     RF      AUCprg  644.0
+22  A.Pernambucense.teste.2_PA1_RUN2_MAXNET PA1 RUN2 MAXNET         TSS  120.0
+23  A.Pernambucense.teste.2_PA1_RUN2_MAXNET PA1 RUN2 MAXNET      AUCroc  121.0
+24  A.Pernambucense.teste.2_PA1_RUN2_MAXNET PA1 RUN2 MAXNET      AUCprg  353.0
+25     A.Pernambucense.teste.2_PA1_RUN3_GLM PA1 RUN3    GLM         TSS  828.0
+26     A.Pernambucense.teste.2_PA1_RUN3_GLM PA1 RUN3    GLM      AUCroc  824.5
+27     A.Pernambucense.teste.2_PA1_RUN3_GLM PA1 RUN3    GLM      AUCprg  944.0
+28     A.Pernambucense.teste.2_PA1_RUN3_GAM PA1 RUN3    GAM         TSS  944.0
+29     A.Pernambucense.teste.2_PA1_RUN3_GAM PA1 RUN3    GAM      AUCroc  942.5
+30     A.Pernambucense.teste.2_PA1_RUN3_GAM PA1 RUN3    GAM      AUCprg  952.0
 31      A.Pernambucense.teste.2_PA1_RUN3_RF PA1 RUN3     RF         TSS  434.0
-32      A.Pernambucense.teste.2_PA1_RUN3_RF PA1 RUN3     RF      AUCroc  429.0
-33      A.Pernambucense.teste.2_PA1_RUN3_RF PA1 RUN3     RF      AUCprg  626.0
-34  A.Pernambucense.teste.2_PA1_RUN3_MAXNET PA1 RUN3 MAXNET         TSS   84.0
-35  A.Pernambucense.teste.2_PA1_RUN3_MAXNET PA1 RUN3 MAXNET      AUCroc  175.0
-36  A.Pernambucense.teste.2_PA1_RUN3_MAXNET PA1 RUN3 MAXNET      AUCprg  434.0
-37     A.Pernambucense.teste.2_PA2_RUN1_GLM PA2 RUN1    GLM         TSS  752.5
-38     A.Pernambucense.teste.2_PA2_RUN1_GLM PA2 RUN1    GLM      AUCroc  906.5
-39     A.Pernambucense.teste.2_PA2_RUN1_GLM PA2 RUN1    GLM      AUCprg  974.0
-40     A.Pernambucense.teste.2_PA2_RUN1_GAM PA2 RUN1    GAM         TSS  949.0
-41     A.Pernambucense.teste.2_PA2_RUN1_GAM PA2 RUN1    GAM      AUCroc  946.0
-42     A.Pernambucense.teste.2_PA2_RUN1_GAM PA2 RUN1    GAM      AUCprg  950.0
+32      A.Pernambucense.teste.2_PA1_RUN3_RF PA1 RUN3     RF      AUCroc  433.0
+33      A.Pernambucense.teste.2_PA1_RUN3_RF PA1 RUN3     RF      AUCprg  640.0
+34  A.Pernambucense.teste.2_PA1_RUN3_MAXNET PA1 RUN3 MAXNET         TSS  117.0
+35  A.Pernambucense.teste.2_PA1_RUN3_MAXNET PA1 RUN3 MAXNET      AUCroc  121.5
+36  A.Pernambucense.teste.2_PA1_RUN3_MAXNET PA1 RUN3 MAXNET      AUCprg  358.0
+37     A.Pernambucense.teste.2_PA2_RUN1_GLM PA2 RUN1    GLM         TSS  793.0
+38     A.Pernambucense.teste.2_PA2_RUN1_GLM PA2 RUN1    GLM      AUCroc  792.5
+39     A.Pernambucense.teste.2_PA2_RUN1_GLM PA2 RUN1    GLM      AUCprg  935.0
+40     A.Pernambucense.teste.2_PA2_RUN1_GAM PA2 RUN1    GAM         TSS  869.0
+41     A.Pernambucense.teste.2_PA2_RUN1_GAM PA2 RUN1    GAM      AUCroc  867.0
+42     A.Pernambucense.teste.2_PA2_RUN1_GAM PA2 RUN1    GAM      AUCprg  941.0
 43      A.Pernambucense.teste.2_PA2_RUN1_RF PA2 RUN1     RF         TSS  455.0
-44      A.Pernambucense.teste.2_PA2_RUN1_RF PA2 RUN1     RF      AUCroc  456.0
-45      A.Pernambucense.teste.2_PA2_RUN1_RF PA2 RUN1     RF      AUCprg  650.0
-46  A.Pernambucense.teste.2_PA2_RUN1_MAXNET PA2 RUN1 MAXNET         TSS  152.0
-47  A.Pernambucense.teste.2_PA2_RUN1_MAXNET PA2 RUN1 MAXNET      AUCroc  152.5
-48  A.Pernambucense.teste.2_PA2_RUN1_MAXNET PA2 RUN1 MAXNET      AUCprg  378.0
-49     A.Pernambucense.teste.2_PA2_RUN2_GLM PA2 RUN2    GLM         TSS  929.0
-50     A.Pernambucense.teste.2_PA2_RUN2_GLM PA2 RUN2    GLM      AUCroc  928.5
-51     A.Pernambucense.teste.2_PA2_RUN2_GLM PA2 RUN2    GLM      AUCprg  945.0
-52     A.Pernambucense.teste.2_PA2_RUN2_GAM PA2 RUN2    GAM         TSS  879.0
-53     A.Pernambucense.teste.2_PA2_RUN2_GAM PA2 RUN2    GAM      AUCroc  946.5
-54     A.Pernambucense.teste.2_PA2_RUN2_GAM PA2 RUN2    GAM      AUCprg  971.0
-55      A.Pernambucense.teste.2_PA2_RUN2_RF PA2 RUN2     RF         TSS  470.0
-56      A.Pernambucense.teste.2_PA2_RUN2_RF PA2 RUN2     RF      AUCroc  469.0
-57      A.Pernambucense.teste.2_PA2_RUN2_RF PA2 RUN2     RF      AUCprg  680.0
-58  A.Pernambucense.teste.2_PA2_RUN2_MAXNET PA2 RUN2 MAXNET         TSS   93.0
-59  A.Pernambucense.teste.2_PA2_RUN2_MAXNET PA2 RUN2 MAXNET      AUCroc   92.5
-60  A.Pernambucense.teste.2_PA2_RUN2_MAXNET PA2 RUN2 MAXNET      AUCprg  454.0
-61     A.Pernambucense.teste.2_PA2_RUN3_GLM PA2 RUN3    GLM         TSS  904.0
-62     A.Pernambucense.teste.2_PA2_RUN3_GLM PA2 RUN3    GLM      AUCroc  906.0
-63     A.Pernambucense.teste.2_PA2_RUN3_GLM PA2 RUN3    GLM      AUCprg  938.0
-64     A.Pernambucense.teste.2_PA2_RUN3_GAM PA2 RUN3    GAM         TSS  889.0
-65     A.Pernambucense.teste.2_PA2_RUN3_GAM PA2 RUN3    GAM      AUCroc  885.5
+44      A.Pernambucense.teste.2_PA2_RUN1_RF PA2 RUN1     RF      AUCroc  454.0
+45      A.Pernambucense.teste.2_PA2_RUN1_RF PA2 RUN1     RF      AUCprg  616.0
+46  A.Pernambucense.teste.2_PA2_RUN1_MAXNET PA2 RUN1 MAXNET         TSS   90.0
+47  A.Pernambucense.teste.2_PA2_RUN1_MAXNET PA2 RUN1 MAXNET      AUCroc   90.0
+48  A.Pernambucense.teste.2_PA2_RUN1_MAXNET PA2 RUN1 MAXNET      AUCprg  389.0
+49     A.Pernambucense.teste.2_PA2_RUN2_GLM PA2 RUN2    GLM         TSS  874.0
+50     A.Pernambucense.teste.2_PA2_RUN2_GLM PA2 RUN2    GLM      AUCroc  876.0
+51     A.Pernambucense.teste.2_PA2_RUN2_GLM PA2 RUN2    GLM      AUCprg  959.0
+52     A.Pernambucense.teste.2_PA2_RUN2_GAM PA2 RUN2    GAM         TSS  949.0
+53     A.Pernambucense.teste.2_PA2_RUN2_GAM PA2 RUN2    GAM      AUCroc  949.0
+54     A.Pernambucense.teste.2_PA2_RUN2_GAM PA2 RUN2    GAM      AUCprg  954.0
+55      A.Pernambucense.teste.2_PA2_RUN2_RF PA2 RUN2     RF         TSS  449.5
+56      A.Pernambucense.teste.2_PA2_RUN2_RF PA2 RUN2     RF      AUCroc  446.0
+57      A.Pernambucense.teste.2_PA2_RUN2_RF PA2 RUN2     RF      AUCprg  648.0
+58  A.Pernambucense.teste.2_PA2_RUN2_MAXNET PA2 RUN2 MAXNET         TSS  241.0
+59  A.Pernambucense.teste.2_PA2_RUN2_MAXNET PA2 RUN2 MAXNET      AUCroc  238.5
+60  A.Pernambucense.teste.2_PA2_RUN2_MAXNET PA2 RUN2 MAXNET      AUCprg  369.0
+61     A.Pernambucense.teste.2_PA2_RUN3_GLM PA2 RUN3    GLM         TSS  864.0
+62     A.Pernambucense.teste.2_PA2_RUN3_GLM PA2 RUN3    GLM      AUCroc  862.0
+63     A.Pernambucense.teste.2_PA2_RUN3_GLM PA2 RUN3    GLM      AUCprg  964.0
+64     A.Pernambucense.teste.2_PA2_RUN3_GAM PA2 RUN3    GAM         TSS  909.0
+65     A.Pernambucense.teste.2_PA2_RUN3_GAM PA2 RUN3    GAM      AUCroc  909.5
 66     A.Pernambucense.teste.2_PA2_RUN3_GAM PA2 RUN3    GAM      AUCprg  933.0
-67      A.Pernambucense.teste.2_PA2_RUN3_RF PA2 RUN3     RF         TSS  465.0
-68      A.Pernambucense.teste.2_PA2_RUN3_RF PA2 RUN3     RF      AUCroc  464.0
-69      A.Pernambucense.teste.2_PA2_RUN3_RF PA2 RUN3     RF      AUCprg  630.0
-70  A.Pernambucense.teste.2_PA2_RUN3_MAXNET PA2 RUN3 MAXNET         TSS   95.0
-71  A.Pernambucense.teste.2_PA2_RUN3_MAXNET PA2 RUN3 MAXNET      AUCroc   99.0
-72  A.Pernambucense.teste.2_PA2_RUN3_MAXNET PA2 RUN3 MAXNET      AUCprg  411.0
-73     A.Pernambucense.teste.2_PA3_RUN1_GLM PA3 RUN1    GLM         TSS  717.0
-74     A.Pernambucense.teste.2_PA3_RUN1_GLM PA3 RUN1    GLM      AUCroc  714.0
-75     A.Pernambucense.teste.2_PA3_RUN1_GLM PA3 RUN1    GLM      AUCprg  949.0
-76     A.Pernambucense.teste.2_PA3_RUN1_GAM PA3 RUN1    GAM         TSS  813.0
-77     A.Pernambucense.teste.2_PA3_RUN1_GAM PA3 RUN1    GAM      AUCroc  812.0
-78     A.Pernambucense.teste.2_PA3_RUN1_GAM PA3 RUN1    GAM      AUCprg  974.0
-79      A.Pernambucense.teste.2_PA3_RUN1_RF PA3 RUN1     RF         TSS  465.0
-80      A.Pernambucense.teste.2_PA3_RUN1_RF PA3 RUN1     RF      AUCroc  460.0
-81      A.Pernambucense.teste.2_PA3_RUN1_RF PA3 RUN1     RF      AUCprg  586.0
-82  A.Pernambucense.teste.2_PA3_RUN1_MAXNET PA3 RUN1 MAXNET         TSS  264.0
-83  A.Pernambucense.teste.2_PA3_RUN1_MAXNET PA3 RUN1 MAXNET      AUCroc  262.0
-84  A.Pernambucense.teste.2_PA3_RUN1_MAXNET PA3 RUN1 MAXNET      AUCprg  336.0
-85     A.Pernambucense.teste.2_PA3_RUN2_GLM PA3 RUN2    GLM         TSS  803.0
-86     A.Pernambucense.teste.2_PA3_RUN2_GLM PA3 RUN2    GLM      AUCroc  806.5
-87     A.Pernambucense.teste.2_PA3_RUN2_GLM PA3 RUN2    GLM      AUCprg  945.0
-88     A.Pernambucense.teste.2_PA3_RUN2_GAM PA3 RUN2    GAM         TSS  899.0
-89     A.Pernambucense.teste.2_PA3_RUN2_GAM PA3 RUN2    GAM      AUCroc  899.0
-90     A.Pernambucense.teste.2_PA3_RUN2_GAM PA3 RUN2    GAM      AUCprg  910.0
-91      A.Pernambucense.teste.2_PA3_RUN2_RF PA3 RUN2     RF         TSS  530.0
-92      A.Pernambucense.teste.2_PA3_RUN2_RF PA3 RUN2     RF      AUCroc  531.0
-93      A.Pernambucense.teste.2_PA3_RUN2_RF PA3 RUN2     RF      AUCprg  672.0
-94  A.Pernambucense.teste.2_PA3_RUN2_MAXNET PA3 RUN2 MAXNET         TSS  125.0
-95  A.Pernambucense.teste.2_PA3_RUN2_MAXNET PA3 RUN2 MAXNET      AUCroc  127.5
-96  A.Pernambucense.teste.2_PA3_RUN2_MAXNET PA3 RUN2 MAXNET      AUCprg  431.0
-97     A.Pernambucense.teste.2_PA3_RUN3_GLM PA3 RUN3    GLM         TSS  752.5
-98     A.Pernambucense.teste.2_PA3_RUN3_GLM PA3 RUN3    GLM      AUCroc  752.0
-99     A.Pernambucense.teste.2_PA3_RUN3_GLM PA3 RUN3    GLM      AUCprg  955.0
-100    A.Pernambucense.teste.2_PA3_RUN3_GAM PA3 RUN3    GAM         TSS  879.0
-101    A.Pernambucense.teste.2_PA3_RUN3_GAM PA3 RUN3    GAM      AUCroc  958.5
-102    A.Pernambucense.teste.2_PA3_RUN3_GAM PA3 RUN3    GAM      AUCprg  959.0
-103     A.Pernambucense.teste.2_PA3_RUN3_RF PA3 RUN3     RF         TSS  480.0
-104     A.Pernambucense.teste.2_PA3_RUN3_RF PA3 RUN3     RF      AUCroc  476.0
-105     A.Pernambucense.teste.2_PA3_RUN3_RF PA3 RUN3     RF      AUCprg  636.0
-106 A.Pernambucense.teste.2_PA3_RUN3_MAXNET PA3 RUN3 MAXNET         TSS  109.0
-107 A.Pernambucense.teste.2_PA3_RUN3_MAXNET PA3 RUN3 MAXNET      AUCroc  195.5
-108 A.Pernambucense.teste.2_PA3_RUN3_MAXNET PA3 RUN3 MAXNET      AUCprg  371.0
+67      A.Pernambucense.teste.2_PA2_RUN3_RF PA2 RUN3     RF         TSS  485.0
+68      A.Pernambucense.teste.2_PA2_RUN3_RF PA2 RUN3     RF      AUCroc  483.0
+69      A.Pernambucense.teste.2_PA2_RUN3_RF PA2 RUN3     RF      AUCprg  662.0
+70  A.Pernambucense.teste.2_PA2_RUN3_MAXNET PA2 RUN3 MAXNET         TSS  122.0
+71  A.Pernambucense.teste.2_PA2_RUN3_MAXNET PA2 RUN3 MAXNET      AUCroc  125.0
+72  A.Pernambucense.teste.2_PA2_RUN3_MAXNET PA2 RUN3 MAXNET      AUCprg  389.0
+73     A.Pernambucense.teste.2_PA3_RUN1_GLM PA3 RUN1    GLM         TSS  778.0
+74     A.Pernambucense.teste.2_PA3_RUN1_GLM PA3 RUN1    GLM      AUCroc  775.0
+75     A.Pernambucense.teste.2_PA3_RUN1_GLM PA3 RUN1    GLM      AUCprg  951.0
+76     A.Pernambucense.teste.2_PA3_RUN1_GAM PA3 RUN1    GAM         TSS  853.5
+77     A.Pernambucense.teste.2_PA3_RUN1_GAM PA3 RUN1    GAM      AUCroc  850.5
+78     A.Pernambucense.teste.2_PA3_RUN1_GAM PA3 RUN1    GAM      AUCprg  964.0
+79      A.Pernambucense.teste.2_PA3_RUN1_RF PA3 RUN1     RF         TSS  470.0
+80      A.Pernambucense.teste.2_PA3_RUN1_RF PA3 RUN1     RF      AUCroc  467.0
+81      A.Pernambucense.teste.2_PA3_RUN1_RF PA3 RUN1     RF      AUCprg  658.0
+82  A.Pernambucense.teste.2_PA3_RUN1_MAXNET PA3 RUN1 MAXNET         TSS  212.5
+83  A.Pernambucense.teste.2_PA3_RUN1_MAXNET PA3 RUN1 MAXNET      AUCroc  210.0
+84  A.Pernambucense.teste.2_PA3_RUN1_MAXNET PA3 RUN1 MAXNET      AUCprg  340.0
+85     A.Pernambucense.teste.2_PA3_RUN2_GLM PA3 RUN2    GLM         TSS  793.0
+86     A.Pernambucense.teste.2_PA3_RUN2_GLM PA3 RUN2    GLM      AUCroc  802.5
+87     A.Pernambucense.teste.2_PA3_RUN2_GLM PA3 RUN2    GLM      AUCprg  971.0
+88     A.Pernambucense.teste.2_PA3_RUN2_GAM PA3 RUN2    GAM         TSS  884.0
+89     A.Pernambucense.teste.2_PA3_RUN2_GAM PA3 RUN2    GAM      AUCroc  882.0
+90     A.Pernambucense.teste.2_PA3_RUN2_GAM PA3 RUN2    GAM      AUCprg  970.0
+91      A.Pernambucense.teste.2_PA3_RUN2_RF PA3 RUN2     RF         TSS  460.0
+92      A.Pernambucense.teste.2_PA3_RUN2_RF PA3 RUN2     RF      AUCroc  458.0
+93      A.Pernambucense.teste.2_PA3_RUN2_RF PA3 RUN2     RF      AUCprg  642.0
+94  A.Pernambucense.teste.2_PA3_RUN2_MAXNET PA3 RUN2 MAXNET         TSS  219.0
+95  A.Pernambucense.teste.2_PA3_RUN2_MAXNET PA3 RUN2 MAXNET      AUCroc  218.0
+96  A.Pernambucense.teste.2_PA3_RUN2_MAXNET PA3 RUN2 MAXNET      AUCprg  360.0
+97     A.Pernambucense.teste.2_PA3_RUN3_GLM PA3 RUN3    GLM         TSS  828.0
+98     A.Pernambucense.teste.2_PA3_RUN3_GLM PA3 RUN3    GLM      AUCroc  830.0
+99     A.Pernambucense.teste.2_PA3_RUN3_GLM PA3 RUN3    GLM      AUCprg  960.0
+100    A.Pernambucense.teste.2_PA3_RUN3_GAM PA3 RUN3    GAM         TSS  798.0
+101    A.Pernambucense.teste.2_PA3_RUN3_GAM PA3 RUN3    GAM      AUCroc  798.5
+102    A.Pernambucense.teste.2_PA3_RUN3_GAM PA3 RUN3    GAM      AUCprg  963.0
+103     A.Pernambucense.teste.2_PA3_RUN3_RF PA3 RUN3     RF         TSS  449.5
+104     A.Pernambucense.teste.2_PA3_RUN3_RF PA3 RUN3     RF      AUCroc  447.0
+105     A.Pernambucense.teste.2_PA3_RUN3_RF PA3 RUN3     RF      AUCprg  648.0
+106 A.Pernambucense.teste.2_PA3_RUN3_MAXNET PA3 RUN3 MAXNET         TSS  188.0
+107 A.Pernambucense.teste.2_PA3_RUN3_MAXNET PA3 RUN3 MAXNET      AUCroc  186.0
+108 A.Pernambucense.teste.2_PA3_RUN3_MAXNET PA3 RUN3 MAXNET      AUCprg  339.0
     sensitivity specificity calibration validation evaluation
-1       100.000      99.511       0.995      0.949         NA
-2       100.000      99.511       0.998      0.998         NA
-3        94.521      99.644       0.996      1.000         NA
-4       100.000      99.733       0.997      0.871         NA
-5       100.000      99.733       0.999      0.975         NA
-6        97.260      99.822       0.998      0.990         NA
-7       100.000     100.000       1.000      0.875         NA
+1       100.000      99.733       0.997      0.907         NA
+2       100.000      99.733       0.999      0.996         NA
+3        97.260      99.867       0.999      0.995         NA
+4       100.000     100.000       1.000      0.945         NA
+5       100.000     100.000       1.000      0.973         NA
+6       100.000     100.000       1.000      0.986         NA
+7       100.000     100.000       1.000      0.872         NA
 8       100.000     100.000       1.000      0.998         NA
 9       100.000     100.000       1.000      1.000         NA
-10      100.000      98.044       0.980      0.973         NA
-11       98.630      99.067       0.998      1.000         NA
-12       93.151      99.689       0.992      1.000         NA
-13      100.000      99.333       0.993      0.992         NA
-14      100.000      99.333       0.998      1.000         NA
-15       94.521      99.511       0.996      1.000         NA
-16      100.000      99.689       0.997      0.999         NA
-17      100.000      99.689       0.999      1.000         NA
-18       97.260      99.778       0.997      1.000         NA
-19      100.000     100.000       1.000      0.958         NA
-20      100.000     100.000       1.000      1.000         NA
+10      100.000      99.378       0.994      0.942         NA
+11      100.000      99.422       1.000      0.996         NA
+12       97.260      99.911       1.000      0.956         NA
+13      100.000      99.644       0.996      0.950         NA
+14      100.000      99.644       0.999      0.996         NA
+15       95.890      99.822       0.997      0.992         NA
+16      100.000     100.000       1.000      0.866         NA
+17      100.000     100.000       1.000      0.933         NA
+18      100.000     100.000       1.000      0.987         NA
+19      100.000     100.000       1.000      0.790         NA
+20      100.000     100.000       1.000      0.997         NA
 21      100.000     100.000       1.000      1.000         NA
-22      100.000      97.867       0.979      0.980         NA
-23       98.630      98.933       0.998      1.000         NA
-24       94.521      99.689       0.992      1.000         NA
-25      100.000      99.511       0.995      0.911         NA
-26      100.000      99.511       0.999      0.997         NA
-27       97.260      99.556       0.999      0.997         NA
-28      100.000      99.822       0.998      0.913         NA
-29      100.000      99.822       0.999      0.997         NA
-30       98.630      99.867       0.998      0.993         NA
-31      100.000     100.000       1.000      0.874         NA
+22      100.000      99.111       0.991      0.983         NA
+23      100.000      99.111       0.999      0.998         NA
+24       97.260      99.867       0.992      0.999         NA
+25      100.000      99.511       0.995      0.954         NA
+26      100.000      99.511       0.999      0.998         NA
+27       97.260      99.689       0.997      1.000         NA
+28      100.000      99.911       0.999      0.954         NA
+29      100.000      99.911       1.000      0.978         NA
+30      100.000      99.911       0.999      0.999         NA
+31      100.000     100.000       1.000      0.833         NA
 32      100.000     100.000       1.000      0.999         NA
 33      100.000     100.000       1.000      1.000         NA
-34      100.000      97.733       0.977      0.983         NA
-35       98.630      99.022       0.998      0.999         NA
-36       91.781      99.822       0.992      1.000         NA
-37      100.000      99.511       0.995      0.996         NA
-38      100.000      99.556       0.999      0.999         NA
-39       93.151      99.733       0.999      0.997         NA
-40      100.000      99.822       0.998      0.956         NA
-41      100.000      99.822       0.999      0.999         NA
-42      100.000      99.822       0.998      0.996         NA
-43      100.000     100.000       1.000      0.917         NA
-44      100.000     100.000       1.000      1.000         NA
+34      100.000      98.844       0.988      0.953         NA
+35      100.000      98.933       0.999      0.998         NA
+36       94.521      99.822       1.000      0.999         NA
+37      100.000      99.422       0.994      0.949         NA
+38      100.000      99.422       0.998      0.998         NA
+39       98.630      99.689       0.993      1.000         NA
+40      100.000      99.778       0.998      0.906         NA
+41      100.000      99.778       0.999      0.995         NA
+42      100.000      99.778       0.998      0.994         NA
+43      100.000     100.000       1.000      0.870         NA
+44      100.000     100.000       1.000      0.999         NA
 45      100.000     100.000       1.000      1.000         NA
-46      100.000      99.156       0.992      0.993         NA
-47      100.000      99.156       0.999      0.999         NA
-48       95.890      99.644       0.999      1.000         NA
-49      100.000      99.556       0.996      0.997         NA
-50      100.000      99.556       0.999      0.999         NA
-51       98.630      99.600       0.999      0.997         NA
-52      100.000      99.778       0.998      0.956         NA
-53      100.000      99.822       1.000      0.999         NA
-54       97.260      99.867       1.000      0.998         NA
-55      100.000     100.000       1.000      0.957         NA
-56      100.000     100.000       1.000      1.000         NA
+46      100.000      98.444       0.984      0.976         NA
+47      100.000      98.444       0.999      0.999         NA
+48       97.260      99.822       0.992      1.000         NA
+49      100.000      99.556       0.996      0.872         NA
+50      100.000      99.556       0.999      0.978         NA
+51       97.260      99.689       0.998      0.999         NA
+52      100.000      99.911       0.999      0.706         NA
+53      100.000      99.911       1.000      0.937         NA
+54      100.000      99.911       0.999      0.998         NA
+55      100.000     100.000       1.000      0.708         NA
+56      100.000     100.000       1.000      0.992         NA
 57      100.000     100.000       1.000      1.000         NA
-58       98.630      98.667       0.987      0.985         NA
-59      100.000      98.667       0.999      0.999         NA
-60       91.781      99.778       1.000      0.997         NA
-61      100.000      99.644       0.996      0.995         NA
-62      100.000      99.644       0.999      0.998         NA
-63       98.630      99.689       0.999      0.996         NA
-64      100.000      99.867       0.999      0.911         NA
-65      100.000      99.867       0.999      0.998         NA
-66      100.000      99.867       0.999      0.998         NA
-67      100.000     100.000       1.000      0.872         NA
-68      100.000     100.000       1.000      0.999         NA
+58      100.000      99.378       0.994      0.914         NA
+59      100.000      99.378       0.999      0.999         NA
+60       97.260      99.689       0.993      1.000         NA
+61      100.000      99.467       0.995      0.989         NA
+62      100.000      99.467       0.998      0.997         NA
+63       95.890      99.644       0.997      0.994         NA
+64      100.000      99.689       0.997      0.992         NA
+65      100.000      99.689       0.998      0.997         NA
+66      100.000      99.689       0.996      0.990         NA
+67      100.000     100.000       1.000      0.954         NA
+68      100.000     100.000       1.000      1.000         NA
 69      100.000     100.000       1.000      1.000         NA
-70      100.000      98.711       0.986      0.983         NA
-71      100.000      98.800       0.999      0.998         NA
-72       97.260      99.778       1.000      0.988         NA
-73      100.000      99.156       0.992      0.952         NA
-74      100.000      99.156       0.998      0.998         NA
-75       95.890      99.422       0.998      0.994         NA
-76      100.000      99.467       0.995      0.870         NA
-77      100.000      99.467       0.999      0.998         NA
-78       95.890      99.689       0.997      1.000         NA
-79      100.000     100.000       1.000      0.790         NA
-80      100.000     100.000       1.000      0.998         NA
+70      100.000      98.711       0.987      0.980         NA
+71      100.000      98.711       0.999      0.998         NA
+72       95.890      99.733       0.993      0.978         NA
+73      100.000      99.333       0.993      0.996         NA
+74      100.000      99.333       0.998      0.999         NA
+75       97.260      99.556       0.994      1.000         NA
+76      100.000      99.689       0.997      0.954         NA
+77      100.000      99.689       0.999      0.999         NA
+78       97.260      99.733       0.999      1.000         NA
+79      100.000     100.000       1.000      0.917         NA
+80      100.000     100.000       1.000      1.000         NA
 81      100.000     100.000       1.000      1.000         NA
-82       98.630      99.289       0.979      0.911         NA
-83       98.630      99.289       0.998      0.999         NA
-84       97.260      99.467       0.992      1.000         NA
-85      100.000      99.244       0.992      0.991         NA
-86      100.000      99.244       0.998      0.998         NA
-87       95.890      99.511       0.996      0.996         NA
+82      100.000      99.244       0.992      0.995         NA
+83      100.000      99.244       0.999      1.000         NA
+84       95.890      99.600       1.000      1.000         NA
+85      100.000      99.333       0.993      0.996         NA
+86      100.000      99.378       0.998      0.999         NA
+87       94.521      99.556       0.995      0.996         NA
 88      100.000      99.689       0.997      0.993         NA
-89      100.000      99.689       0.999      0.997         NA
-90      100.000      99.689       0.999      0.996         NA
-91      100.000     100.000       1.000      0.954         NA
+89      100.000      99.689       0.999      0.998         NA
+90       95.890      99.778       0.999      0.996         NA
+91      100.000     100.000       1.000      0.957         NA
 92      100.000     100.000       1.000      1.000         NA
 93      100.000     100.000       1.000      1.000         NA
-94      100.000      98.400       0.984      0.979         NA
-95      100.000      98.444       0.998      0.999         NA
-96       93.151      99.733       0.992      1.000         NA
-97      100.000      99.067       0.991      0.993         NA
-98      100.000      99.067       0.998      0.998         NA
-99       95.890      99.422       0.995      1.000         NA
-100     100.000      99.733       0.997      0.949         NA
-101     100.000      99.822       0.999      0.976         NA
-102     100.000      99.822       0.998      0.994         NA
+94      100.000      99.244       0.992      0.993         NA
+95      100.000      99.244       0.999      0.999         NA
+96       97.260      99.600       1.000      1.000         NA
+97      100.000      99.378       0.994      0.995         NA
+98      100.000      99.378       0.998      0.999         NA
+99       95.890      99.600       0.997      1.000         NA
+100     100.000      99.867       0.999      0.995         NA
+101     100.000      99.867       1.000      0.998         NA
+102      98.630      99.911       0.999      0.997         NA
 103     100.000     100.000       1.000      0.956         NA
 104     100.000     100.000       1.000      1.000         NA
 105     100.000     100.000       1.000      1.000         NA
-106      98.630      98.222       0.982      0.976         NA
-107      98.630      98.933       0.998      0.999         NA
-108      94.521      99.556       1.000      1.000         NA</code></pre>
+106     100.000      99.111       0.991      0.995         NA
+107     100.000      99.111       0.999      1.000         NA
+108      97.260      99.644       1.000      1.000         NA</code></pre>
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Projetando dados</span></span>
-<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>bio24_projecao <span class="ot">&lt;-</span> <span class="fu">BIOMOD_Projection</span>(</span>
-<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.mod =</span> testebio24_glm,</span>
-<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">proj.name =</span> <span class="st">"bio24_teste 2"</span>,</span>
-<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">new.env =</span> variaveis,</span>
-<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">models.chosen =</span> <span class="st">"all"</span>,</span>
-<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">output.format =</span> <span class="st">".tif"</span></span>
-<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Projetando dados</span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>bio24_projecao <span class="ot">&lt;-</span> <span class="fu">BIOMOD_Projection</span>(</span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.mod =</span> testebio24_glm,</span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">proj.name =</span> <span class="st">"bio24_teste 2"</span>,</span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">new.env =</span> variaveis,</span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">models.chosen =</span> <span class="st">"all"</span>,</span>
+<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">output.format =</span> <span class="st">".tif"</span></span>
+<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -4936,21 +4958,21 @@ models.chosen set to A.Pernambucense.teste.2_PA1_RUN1_GLM, A.Pernambucense.teste
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>bio24_projecao</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>bio24_projecao</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 -=-=-=-=-=-=-=-=-=-=-=-=-=-= BIOMOD.projection.out -=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-Modeling directory (dir.name) : C:/faculdade/Teste_biomod2_parte_2
+Modeling directory (dir.name) : C:/faculdade/PIBIC AMEROGLOSSUM
 Modeled species (sp.name) : A.Pernambucense.teste.2
 Modeling id (modeling.id) : teste 1, 4, 7, 12, elev ( 
-C:/faculdade/Teste_biomod2_parte_2/A.Pernambucense.teste.2/A.Pernambucense.teste.2.teste 1, 4, 7, 12, elev.models.out 
+C:/faculdade/PIBIC AMEROGLOSSUM/A.Pernambucense.teste.2/A.Pernambucense.teste.2.teste 1, 4, 7, 12, elev.models.out 
 )
 
 Projection name (proj.name) : bio24_teste 2
 Projection directory (dir.name/sp.name/proj.name) : 
-C:/faculdade/Teste_biomod2_parte_2/A.Pernambucense.teste.2/bio24_teste 2
+C:/faculdade/PIBIC AMEROGLOSSUM/A.Pernambucense.teste.2/bio24_teste 2
 
 Projected models (models.projected) :  A.Pernambucense.teste.2_PA1_RUN1_GLM 
 A.Pernambucense.teste.2_PA1_RUN1_GAM A.Pernambucense.teste.2_PA1_RUN1_RF 
@@ -4976,63 +4998,61 @@ A.Pernambucense.teste.2_PA3_RUN3_MAXNET
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixando objeto de predição </span></span>
-<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Encontrando objetos</span></span>
-<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(</span>
-<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/"</span>,</span>
-<span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
-<span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixando objeto de predição </span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Encontrando objetos</span></span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(</span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/"</span>,</span>
+<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb88-7"><a href="#cb88-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
+<span id="cb88-8"><a href="#cb88-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "A.Pernambucense.teste.2/proj_bio24_teste 2/A.Pernambucense.teste.2.bio24_teste 2.ensemble.projection.out"
-[2] "A.Pernambucense.teste.2/proj_bio24_teste 2/A.Pernambucense.teste.2.bio24_teste 2.projection.out"         
-[3] "A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2.tif"               
-[4] "A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2_ensemble.tif"      
-[5] "A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_ClampingMask.tif"                          </code></pre>
+<pre><code>[1] "A.Pernambucense.teste.2/proj_bio24_teste 2/A.Pernambucense.teste.2.bio24_teste 2.projection.out"
+[2] "A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2.tif"      
+[3] "A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_ClampingMask.tif"                 </code></pre>
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixando Raster</span></span>
-<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>predicaorastbio24 <span class="ot">&lt;-</span> <span class="fu">rast</span>(</span>
-<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2.tif"</span></span>
-<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotando</span></span>
-<span id="cb88-7"><a href="#cb88-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb88-8"><a href="#cb88-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(predicaorastbio24)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixando Raster</span></span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>predicaorastbio24 <span class="ot">&lt;-</span> <span class="fu">rast</span>(</span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2.tif"</span></span>
+<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb90-5"><a href="#cb90-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-6"><a href="#cb90-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotando</span></span>
+<span id="cb90-7"><a href="#cb90-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-8"><a href="#cb90-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(predicaorastbio24)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="teste-2_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="teste-2_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotando de forma decente</span></span>
-<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="do">## tentando criar um consenso binário</span></span>
-<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>binario <span class="ot">&lt;-</span> predicaorastbio24 <span class="sc">&gt;=</span> <span class="dv">700</span></span>
-<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a>consenso <span class="ot">&lt;-</span> <span class="fu">app</span>(binario, mean)</span>
-<span id="cb89-6"><a href="#cb89-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb89-7"><a href="#cb89-7" aria-hidden="true" tabindex="-1"></a><span class="do">##plotando</span></span>
-<span id="cb89-8"><a href="#cb89-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(consenso)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotando de forma decente</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a><span class="do">## tentando criar um consenso binário</span></span>
+<span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a>binario <span class="ot">&lt;-</span> predicaorastbio24 <span class="sc">&gt;=</span> <span class="dv">700</span></span>
+<span id="cb91-5"><a href="#cb91-5" aria-hidden="true" tabindex="-1"></a>consenso <span class="ot">&lt;-</span> <span class="fu">app</span>(binario, mean)</span>
+<span id="cb91-6"><a href="#cb91-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-7"><a href="#cb91-7" aria-hidden="true" tabindex="-1"></a><span class="do">##plotando</span></span>
+<span id="cb91-8"><a href="#cb91-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(consenso)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="teste-2_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="teste-2_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Utilizando o EssembleModeling</span></span>
-<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a><span class="fu">BIOMOD_EnsembleModeling</span>(testebio24_glm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Utilizando o EssembleModeling</span></span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a><span class="fu">BIOMOD_EnsembleModeling</span>(testebio24_glm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -5182,10 +5202,10 @@ metric.select.thresh set to 000 (all models kept for ensemble)</code></pre>
 <pre><code>
 -=-=-=-=-=-=-=-=-=-=-=-=-= BIOMOD.ensemble.models.out -=-=-=-=-=-=-=-=-=-=-=-=-=
 
-Modeling directory (dir.name) : C:/faculdade/Teste_biomod2_parte_2
+Modeling directory (dir.name) : C:/faculdade/PIBIC AMEROGLOSSUM
 Modeled species (sp.name) : A.Pernambucense.teste.2
 Modeling id (modeling.id) : teste 1, 4, 7, 12, elev ( 
-C:/faculdade/Teste_biomod2_parte_2/A.Pernambucense.teste.2/A.Pernambucense.teste.2.teste 1, 4, 7, 12, elev.models.out 
+C:/faculdade/PIBIC AMEROGLOSSUM/A.Pernambucense.teste.2/A.Pernambucense.teste.2.teste 1, 4, 7, 12, elev.models.out 
 )
 
 Explanatory variables (expl.var.names) : wc2.1_10m_bio_1 wc2.1_10m_bio_4 
@@ -5225,14 +5245,14 @@ Failed models (em.failed) : none
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>ensemble <span class="ot">&lt;-</span> <span class="fu">BIOMOD_EnsembleModeling</span>(</span>
-<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.mod =</span> testebio24_glm,</span>
-<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">em.by =</span> <span class="st">"all"</span>,</span>
-<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">em.algo =</span> <span class="fu">c</span>(<span class="st">"EMmean"</span>),</span>
-<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.select =</span> <span class="st">"TSS"</span>,</span>
-<span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.select.thresh =</span> <span class="fl">0.7</span>,</span>
-<span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.eval =</span> <span class="fu">c</span>(<span class="st">"TSS"</span>, <span class="st">"AUCroc"</span>)</span>
-<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>ensemble <span class="ot">&lt;-</span> <span class="fu">BIOMOD_EnsembleModeling</span>(</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.mod =</span> testebio24_glm,</span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">em.by =</span> <span class="st">"all"</span>,</span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">em.algo =</span> <span class="fu">c</span>(<span class="st">"EMmean"</span>),</span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.select =</span> <span class="st">"TSS"</span>,</span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.select.thresh =</span> <span class="fl">0.7</span>,</span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.eval =</span> <span class="fu">c</span>(<span class="st">"TSS"</span>, <span class="st">"AUCroc"</span>)</span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -5346,11 +5366,11 @@ do.stack set to TRUE (new.env is not a raster object)</code></pre>
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>ensemble_proj <span class="ot">&lt;-</span> <span class="fu">BIOMOD_EnsembleForecasting</span>(</span>
-<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.em =</span> ensemble,</span>
-<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.proj =</span> bio24_projecao,</span>
-<span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">models.chosen =</span> <span class="st">"all"</span></span>
-<span id="cb105-5"><a href="#cb105-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>ensemble_proj <span class="ot">&lt;-</span> <span class="fu">BIOMOD_EnsembleForecasting</span>(</span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.em =</span> ensemble,</span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.proj =</span> bio24_projecao,</span>
+<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">models.chosen =</span> <span class="st">"all"</span></span>
+<span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -5371,13 +5391,13 @@ models.chosen set to A.Pernambucense.teste.2_EMmeanByTSS_mergedData_mergedRun_me
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Plotando (finalmente)</span></span>
-<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(</span>
-<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb109-5"><a href="#cb109-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"ensemble|EM|tif"</span>,</span>
-<span id="cb109-6"><a href="#cb109-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
-<span id="cb109-7"><a href="#cb109-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Plotando (finalmente)</span></span>
+<span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-3"><a href="#cb111-3" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(</span>
+<span id="cb111-4"><a href="#cb111-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb111-5"><a href="#cb111-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"ensemble|EM|tif"</span>,</span>
+<span id="cb111-6"><a href="#cb111-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
+<span id="cb111-7"><a href="#cb111-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "./A.Pernambucense.teste.2/A.Pernambucense.teste.2.teste 1, 4, 7, 12, elev.ensemble.models.out"                               
@@ -5413,41 +5433,21 @@ models.chosen set to A.Pernambucense.teste.2_EMmeanByTSS_mergedData_mergedRun_me
 [31] "./A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2.tif"                                 
 [32] "./A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2_ensemble.tif"                        
 [33] "./A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_ClampingMask.tif"                                            
-[34] "./wc2.1_10m_bio/wc2.1_10m_bio_1.tif"                                                                                         
-[35] "./wc2.1_10m_bio/wc2.1_10m_bio_10.tif"                                                                                        
-[36] "./wc2.1_10m_bio/wc2.1_10m_bio_11.tif"                                                                                        
-[37] "./wc2.1_10m_bio/wc2.1_10m_bio_12.tif"                                                                                        
-[38] "./wc2.1_10m_bio/wc2.1_10m_bio_13.tif"                                                                                        
-[39] "./wc2.1_10m_bio/wc2.1_10m_bio_14.tif"                                                                                        
-[40] "./wc2.1_10m_bio/wc2.1_10m_bio_15.tif"                                                                                        
-[41] "./wc2.1_10m_bio/wc2.1_10m_bio_16.tif"                                                                                        
-[42] "./wc2.1_10m_bio/wc2.1_10m_bio_17.tif"                                                                                        
-[43] "./wc2.1_10m_bio/wc2.1_10m_bio_18.tif"                                                                                        
-[44] "./wc2.1_10m_bio/wc2.1_10m_bio_19.tif"                                                                                        
-[45] "./wc2.1_10m_bio/wc2.1_10m_bio_2.tif"                                                                                         
-[46] "./wc2.1_10m_bio/wc2.1_10m_bio_3.tif"                                                                                         
-[47] "./wc2.1_10m_bio/wc2.1_10m_bio_4.tif"                                                                                         
-[48] "./wc2.1_10m_bio/wc2.1_10m_bio_5.tif"                                                                                         
-[49] "./wc2.1_10m_bio/wc2.1_10m_bio_6.tif"                                                                                         
-[50] "./wc2.1_10m_bio/wc2.1_10m_bio_7.tif"                                                                                         
-[51] "./wc2.1_10m_bio/wc2.1_10m_bio_8.tif"                                                                                         
-[52] "./wc2.1_10m_bio/wc2.1_10m_bio_9.tif"                                                                                         
-[53] "./wc2.1_10m_bio_1.tif"                                                                                                       
-[54] "./wc2.1_10m_bio_12.tif"                                                                                                      
-[55] "./wc2.1_10m_bio_4.tif"                                                                                                       
-[56] "./wc2.1_10m_bio_7.tif"                                                                                                       
-[57] "./wc2.1_10m_elev (1)/wc2.1_10m_elev.tif"                                                                                     
-[58] "./wc2.1_10m_elev.tif"                                                                                                        </code></pre>
+[34] "./wc2.1_10m_bio_1.tif"                                                                                                       
+[35] "./wc2.1_10m_bio_12.tif"                                                                                                      
+[36] "./wc2.1_10m_bio_4.tif"                                                                                                       
+[37] "./wc2.1_10m_bio_7.tif"                                                                                                       
+[38] "./wc2.1_10m_elev.tif"                                                                                                        </code></pre>
 </div>
 <details class="code-fold">
 <summary>Mostrar script</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a>ensemble_raster <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2_ensemble.tif"</span>)</span>
-<span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ensemble_raster)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>ensemble_raster <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2_ensemble.tif"</span>)</span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ensemble_raster)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="teste-2_files/figure-html/unnamed-chunk-1-3.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="teste-2_files/figure-html/unnamed-chunk-6-3.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -5909,168 +5909,204 @@ models.chosen set to A.Pernambucense.teste.2_EMmeanByTSS_mergedData_mergedRun_me
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb112" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Teste 2"</span></span>
-<span id="cb112-3"><a href="#cb112-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-4"><a href="#cb112-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb112-5"><a href="#cb112-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb112-6"><a href="#cb112-6" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: cosmo</span></span>
-<span id="cb112-7"><a href="#cb112-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb112-8"><a href="#cb112-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
-<span id="cb112-9"><a href="#cb112-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: "Mostrar script"</span></span>
-<span id="cb112-10"><a href="#cb112-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb112-11"><a href="#cb112-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-copy: true</span></span>
-<span id="cb112-12"><a href="#cb112-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb112-13"><a href="#cb112-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-16"><a href="#cb112-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb112-17"><a href="#cb112-17" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb112-18"><a href="#cb112-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-19"><a href="#cb112-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"terra"</span>)</span>
-<span id="cb112-20"><a href="#cb112-20" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"sf"</span>)</span>
-<span id="cb112-21"><a href="#cb112-21" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"landscapemetrics"</span>)</span>
-<span id="cb112-22"><a href="#cb112-22" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tmap"</span>)</span>
-<span id="cb112-23"><a href="#cb112-23" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span>
-<span id="cb112-24"><a href="#cb112-24" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"vegan"</span>)</span>
-<span id="cb112-25"><a href="#cb112-25" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span>
-<span id="cb112-26"><a href="#cb112-26" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"rgbif"</span>)</span>
-<span id="cb112-27"><a href="#cb112-27" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"geodata"</span>)</span>
-<span id="cb112-28"><a href="#cb112-28" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"geobr"</span>)</span>
-<span id="cb112-29"><a href="#cb112-29" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyterra"</span>)</span>
-<span id="cb112-30"><a href="#cb112-30" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"dplyr"</span>)</span>
-<span id="cb112-31"><a href="#cb112-31" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"biomod2"</span>)</span>
-<span id="cb112-32"><a href="#cb112-32" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"R.utils"</span>)</span>
-<span id="cb112-33"><a href="#cb112-33" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"randomForest"</span>)</span>
-<span id="cb112-34"><a href="#cb112-34" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"maxnet"</span>)</span>
-<span id="cb112-35"><a href="#cb112-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-36"><a href="#cb112-36" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/faculdade/Teste_biomod2_parte_2"</span>)</span>
-<span id="cb112-37"><a href="#cb112-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-38"><a href="#cb112-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Dados em CSV e troca de "," para "."</span></span>
-<span id="cb112-39"><a href="#cb112-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-40"><a href="#cb112-40" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ameroglossum.csv"</span>)</span>
-<span id="cb112-41"><a href="#cb112-41" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum<span class="sc">$</span>long <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>, <span class="st">"."</span>, dados_ameroglossum<span class="sc">$</span>long))</span>
-<span id="cb112-42"><a href="#cb112-42" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum<span class="sc">$</span>lat  <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>, <span class="st">"."</span>, dados_ameroglossum<span class="sc">$</span>lat))</span>
-<span id="cb112-43"><a href="#cb112-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-44"><a href="#cb112-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Definindo variáveis (raster's definidos)</span></span>
-<span id="cb112-45"><a href="#cb112-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-46"><a href="#cb112-46" aria-hidden="true" tabindex="-1"></a>bio1 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_1.tif"</span>)</span>
-<span id="cb112-47"><a href="#cb112-47" aria-hidden="true" tabindex="-1"></a>bio4 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_4.tif"</span>)</span>
-<span id="cb112-48"><a href="#cb112-48" aria-hidden="true" tabindex="-1"></a>bio7 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_7.tif"</span>)</span>
-<span id="cb112-49"><a href="#cb112-49" aria-hidden="true" tabindex="-1"></a>bio12 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_12.tif"</span>)</span>
-<span id="cb112-50"><a href="#cb112-50" aria-hidden="true" tabindex="-1"></a>elev <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_elev.tif"</span>)</span>
-<span id="cb112-51"><a href="#cb112-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-52"><a href="#cb112-52" aria-hidden="true" tabindex="-1"></a><span class="co">#Psudoausências</span></span>
-<span id="cb112-53"><a href="#cb112-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-54"><a href="#cb112-54" aria-hidden="true" tabindex="-1"></a>PA.nb.rep <span class="ot">=</span> <span class="dv">3</span></span>
-<span id="cb112-55"><a href="#cb112-55" aria-hidden="true" tabindex="-1"></a>PA.nb.absences <span class="ot">=</span> <span class="dv">3000</span></span>
-<span id="cb112-56"><a href="#cb112-56" aria-hidden="true" tabindex="-1"></a>PA.strategy <span class="ot">=</span> <span class="st">"random"</span></span>
-<span id="cb112-57"><a href="#cb112-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-58"><a href="#cb112-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Resp.var e Resp.xy (Objetos de presença e localidade)</span></span>
-<span id="cb112-59"><a href="#cb112-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-60"><a href="#cb112-60" aria-hidden="true" tabindex="-1"></a>resp.var <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">nrow</span>(dados_ameroglossum))</span>
-<span id="cb112-61"><a href="#cb112-61" aria-hidden="true" tabindex="-1"></a>resp.xy <span class="ot">&lt;-</span> dados_ameroglossum[,<span class="fu">c</span>(<span class="st">"long"</span>,<span class="st">"lat"</span>)]</span>
-<span id="cb112-62"><a href="#cb112-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-63"><a href="#cb112-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenando variáveis</span></span>
-<span id="cb112-64"><a href="#cb112-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-65"><a href="#cb112-65" aria-hidden="true" tabindex="-1"></a>variaveis <span class="ot">&lt;-</span> <span class="fu">c</span>(bio1, bio4, bio7, bio12, elev)</span>
-<span id="cb112-66"><a href="#cb112-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-67"><a href="#cb112-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando objeto de teste</span></span>
-<span id="cb112-68"><a href="#cb112-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-69"><a href="#cb112-69" aria-hidden="true" tabindex="-1"></a>testebio24 <span class="ot">&lt;-</span> <span class="fu">BIOMOD_FormatingData</span>(</span>
-<span id="cb112-70"><a href="#cb112-70" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.var =</span> resp.var,</span>
-<span id="cb112-71"><a href="#cb112-71" aria-hidden="true" tabindex="-1"></a>  <span class="at">expl.var =</span> variaveis,</span>
-<span id="cb112-72"><a href="#cb112-72" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.xy =</span> resp.xy,</span>
-<span id="cb112-73"><a href="#cb112-73" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.name =</span> <span class="st">"A.Pernambucense teste 2"</span>,</span>
-<span id="cb112-74"><a href="#cb112-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.nb.rep =</span> <span class="dv">3</span>,</span>
-<span id="cb112-75"><a href="#cb112-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.nb.absences =</span> <span class="dv">3000</span>,</span>
-<span id="cb112-76"><a href="#cb112-76" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.strategy =</span> <span class="st">"random"</span>,</span>
-<span id="cb112-77"><a href="#cb112-77" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb112-78"><a href="#cb112-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-79"><a href="#cb112-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelando com GLM, GAM, RF e MaxEnt</span></span>
-<span id="cb112-80"><a href="#cb112-80" aria-hidden="true" tabindex="-1"></a>testebio24_glm <span class="ot">&lt;-</span> <span class="fu">BIOMOD_Modeling</span>(</span>
-<span id="cb112-81"><a href="#cb112-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.format=</span>testebio24,</span>
-<span id="cb112-82"><a href="#cb112-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">modeling.id =</span> <span class="st">"teste 1, 4, 7, 12, elev"</span>,</span>
-<span id="cb112-83"><a href="#cb112-83" aria-hidden="true" tabindex="-1"></a>  <span class="at">models =</span> <span class="fu">c</span>(<span class="st">"GLM"</span>, <span class="st">"GAM"</span>, <span class="st">"RF"</span>, <span class="st">"MAXNET"</span>),</span>
-<span id="cb112-84"><a href="#cb112-84" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.strategy =</span> <span class="st">"random"</span>,</span>
-<span id="cb112-85"><a href="#cb112-85" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.nb.rep =</span> <span class="dv">3</span>,</span>
-<span id="cb112-86"><a href="#cb112-86" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.perc =</span> <span class="fl">0.75</span>,</span>
-<span id="cb112-87"><a href="#cb112-87" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.eval =</span> <span class="fu">c</span> (<span class="st">"TSS"</span>, <span class="st">"AUCroc"</span>, <span class="st">"AUCprg"</span>),</span>
-<span id="cb112-88"><a href="#cb112-88" aria-hidden="true" tabindex="-1"></a>  <span class="at">var.import =</span> <span class="dv">10</span></span>
-<span id="cb112-89"><a href="#cb112-89" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb112-90"><a href="#cb112-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-91"><a href="#cb112-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-92"><a href="#cb112-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Vendo os resultados</span></span>
-<span id="cb112-93"><a href="#cb112-93" aria-hidden="true" tabindex="-1"></a><span class="fu">get_evaluations</span>(testebio24_glm)</span>
-<span id="cb112-94"><a href="#cb112-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-95"><a href="#cb112-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-96"><a href="#cb112-96" aria-hidden="true" tabindex="-1"></a><span class="co"># Projetando dados</span></span>
-<span id="cb112-97"><a href="#cb112-97" aria-hidden="true" tabindex="-1"></a>bio24_projecao <span class="ot">&lt;-</span> <span class="fu">BIOMOD_Projection</span>(</span>
-<span id="cb112-98"><a href="#cb112-98" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.mod =</span> testebio24_glm,</span>
-<span id="cb112-99"><a href="#cb112-99" aria-hidden="true" tabindex="-1"></a>  <span class="at">proj.name =</span> <span class="st">"bio24_teste 2"</span>,</span>
-<span id="cb112-100"><a href="#cb112-100" aria-hidden="true" tabindex="-1"></a>  <span class="at">new.env =</span> variaveis,</span>
-<span id="cb112-101"><a href="#cb112-101" aria-hidden="true" tabindex="-1"></a>  <span class="at">models.chosen =</span> <span class="st">"all"</span>,</span>
-<span id="cb112-102"><a href="#cb112-102" aria-hidden="true" tabindex="-1"></a>  <span class="at">output.format =</span> <span class="st">".tif"</span></span>
-<span id="cb112-103"><a href="#cb112-103" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb112-104"><a href="#cb112-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-105"><a href="#cb112-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-106"><a href="#cb112-106" aria-hidden="true" tabindex="-1"></a>bio24_projecao</span>
-<span id="cb112-107"><a href="#cb112-107" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixando objeto de predição </span></span>
-<span id="cb112-108"><a href="#cb112-108" aria-hidden="true" tabindex="-1"></a><span class="do">## Encontrando objetos</span></span>
-<span id="cb112-109"><a href="#cb112-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-110"><a href="#cb112-110" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(</span>
-<span id="cb112-111"><a href="#cb112-111" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/"</span>,</span>
-<span id="cb112-112"><a href="#cb112-112" aria-hidden="true" tabindex="-1"></a>  <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb112-113"><a href="#cb112-113" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
-<span id="cb112-114"><a href="#cb112-114" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb112-115"><a href="#cb112-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-116"><a href="#cb112-116" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixando Raster</span></span>
-<span id="cb112-117"><a href="#cb112-117" aria-hidden="true" tabindex="-1"></a>predicaorastbio24 <span class="ot">&lt;-</span> <span class="fu">rast</span>(</span>
-<span id="cb112-118"><a href="#cb112-118" aria-hidden="true" tabindex="-1"></a>  <span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2.tif"</span></span>
-<span id="cb112-119"><a href="#cb112-119" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb112-120"><a href="#cb112-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-121"><a href="#cb112-121" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotando</span></span>
-<span id="cb112-122"><a href="#cb112-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-123"><a href="#cb112-123" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(predicaorastbio24)</span>
-<span id="cb112-124"><a href="#cb112-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-125"><a href="#cb112-125" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotando de forma decente</span></span>
-<span id="cb112-126"><a href="#cb112-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-127"><a href="#cb112-127" aria-hidden="true" tabindex="-1"></a><span class="do">## tentando criar um consenso binário</span></span>
-<span id="cb112-128"><a href="#cb112-128" aria-hidden="true" tabindex="-1"></a>binario <span class="ot">&lt;-</span> predicaorastbio24 <span class="sc">&gt;=</span> <span class="dv">700</span></span>
-<span id="cb112-129"><a href="#cb112-129" aria-hidden="true" tabindex="-1"></a>consenso <span class="ot">&lt;-</span> <span class="fu">app</span>(binario, mean)</span>
-<span id="cb112-130"><a href="#cb112-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-131"><a href="#cb112-131" aria-hidden="true" tabindex="-1"></a><span class="do">##plotando</span></span>
-<span id="cb112-132"><a href="#cb112-132" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(consenso)</span>
-<span id="cb112-133"><a href="#cb112-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-134"><a href="#cb112-134" aria-hidden="true" tabindex="-1"></a><span class="co"># Utilizando o EssembleModeling</span></span>
-<span id="cb112-135"><a href="#cb112-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-136"><a href="#cb112-136" aria-hidden="true" tabindex="-1"></a><span class="fu">BIOMOD_EnsembleModeling</span>(testebio24_glm)</span>
-<span id="cb112-137"><a href="#cb112-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-138"><a href="#cb112-138" aria-hidden="true" tabindex="-1"></a>ensemble <span class="ot">&lt;-</span> <span class="fu">BIOMOD_EnsembleModeling</span>(</span>
-<span id="cb112-139"><a href="#cb112-139" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.mod =</span> testebio24_glm,</span>
-<span id="cb112-140"><a href="#cb112-140" aria-hidden="true" tabindex="-1"></a>  <span class="at">em.by =</span> <span class="st">"all"</span>,</span>
-<span id="cb112-141"><a href="#cb112-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">em.algo =</span> <span class="fu">c</span>(<span class="st">"EMmean"</span>),</span>
-<span id="cb112-142"><a href="#cb112-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.select =</span> <span class="st">"TSS"</span>,</span>
-<span id="cb112-143"><a href="#cb112-143" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.select.thresh =</span> <span class="fl">0.7</span>,</span>
-<span id="cb112-144"><a href="#cb112-144" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.eval =</span> <span class="fu">c</span>(<span class="st">"TSS"</span>, <span class="st">"AUCroc"</span>)</span>
-<span id="cb112-145"><a href="#cb112-145" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb112-146"><a href="#cb112-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-147"><a href="#cb112-147" aria-hidden="true" tabindex="-1"></a>ensemble_proj <span class="ot">&lt;-</span> <span class="fu">BIOMOD_EnsembleForecasting</span>(</span>
-<span id="cb112-148"><a href="#cb112-148" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.em =</span> ensemble,</span>
-<span id="cb112-149"><a href="#cb112-149" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.proj =</span> bio24_projecao,</span>
-<span id="cb112-150"><a href="#cb112-150" aria-hidden="true" tabindex="-1"></a>  <span class="at">models.chosen =</span> <span class="st">"all"</span></span>
-<span id="cb112-151"><a href="#cb112-151" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb112-152"><a href="#cb112-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-153"><a href="#cb112-153" aria-hidden="true" tabindex="-1"></a><span class="do">### Plotando (finalmente)</span></span>
-<span id="cb112-154"><a href="#cb112-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-155"><a href="#cb112-155" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(</span>
-<span id="cb112-156"><a href="#cb112-156" aria-hidden="true" tabindex="-1"></a>  <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb112-157"><a href="#cb112-157" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"ensemble|EM|tif"</span>,</span>
-<span id="cb112-158"><a href="#cb112-158" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
-<span id="cb112-159"><a href="#cb112-159" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb112-160"><a href="#cb112-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-161"><a href="#cb112-161" aria-hidden="true" tabindex="-1"></a>ensemble_raster <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2_ensemble.tif"</span>)</span>
-<span id="cb112-162"><a href="#cb112-162" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ensemble_raster)</span>
-<span id="cb112-163"><a href="#cb112-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb112-164"><a href="#cb112-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb114" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Teste 2"</span></span>
+<span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-4"><a href="#cb114-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb114-5"><a href="#cb114-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb114-6"><a href="#cb114-6" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: cosmo</span></span>
+<span id="cb114-7"><a href="#cb114-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb114-8"><a href="#cb114-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb114-9"><a href="#cb114-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-summary: "Mostrar script"</span></span>
+<span id="cb114-10"><a href="#cb114-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb114-11"><a href="#cb114-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-copy: true</span></span>
+<span id="cb114-12"><a href="#cb114-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb114-13"><a href="#cb114-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-14"><a href="#cb114-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-15"><a href="#cb114-15" aria-hidden="true" tabindex="-1"></a>Inicialmente, precisamos carregar os pacotes requeridos:</span>
+<span id="cb114-16"><a href="#cb114-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-19"><a href="#cb114-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb114-20"><a href="#cb114-20" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb114-21"><a href="#cb114-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb114-22"><a href="#cb114-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-23"><a href="#cb114-23" aria-hidden="true" tabindex="-1"></a><span class="in">``` {r}</span></span>
+<span id="cb114-24"><a href="#cb114-24" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"terra"</span>)</span>
+<span id="cb114-25"><a href="#cb114-25" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"sf"</span>)</span>
+<span id="cb114-26"><a href="#cb114-26" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"landscapemetrics"</span>)</span>
+<span id="cb114-27"><a href="#cb114-27" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tmap"</span>)</span>
+<span id="cb114-28"><a href="#cb114-28" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb114-29"><a href="#cb114-29" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"vegan"</span>)</span>
+<span id="cb114-30"><a href="#cb114-30" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb114-31"><a href="#cb114-31" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"rgbif"</span>)</span>
+<span id="cb114-32"><a href="#cb114-32" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"geodata"</span>)</span>
+<span id="cb114-33"><a href="#cb114-33" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"geobr"</span>)</span>
+<span id="cb114-34"><a href="#cb114-34" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyterra"</span>)</span>
+<span id="cb114-35"><a href="#cb114-35" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb114-36"><a href="#cb114-36" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"biomod2"</span>)</span>
+<span id="cb114-37"><a href="#cb114-37" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"R.utils"</span>)</span>
+<span id="cb114-38"><a href="#cb114-38" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"randomForest"</span>)</span>
+<span id="cb114-39"><a href="#cb114-39" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"maxnet"</span>)</span>
+<span id="cb114-40"><a href="#cb114-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-41"><a href="#cb114-41" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"C:/faculdade/Teste_biomod2_parte_2"</span>)</span>
+<span id="cb114-42"><a href="#cb114-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-43"><a href="#cb114-43" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb114-44"><a href="#cb114-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-45"><a href="#cb114-45" aria-hidden="true" tabindex="-1"></a>Devido ao excel/sheets trabalharem com ","; se torn necessário um passo extra: </span>
+<span id="cb114-46"><a href="#cb114-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-47"><a href="#cb114-47" aria-hidden="true" tabindex="-1"></a>Trocar as vírgulas por pontos na tabela</span>
+<span id="cb114-48"><a href="#cb114-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-51"><a href="#cb114-51" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb114-52"><a href="#cb114-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Dados em CSV e troca de "," para "."</span></span>
+<span id="cb114-53"><a href="#cb114-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-54"><a href="#cb114-54" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ameroglossum.csv"</span>)</span>
+<span id="cb114-55"><a href="#cb114-55" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum<span class="sc">$</span>long <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>, <span class="st">"."</span>, dados_ameroglossum<span class="sc">$</span>long))</span>
+<span id="cb114-56"><a href="#cb114-56" aria-hidden="true" tabindex="-1"></a>dados_ameroglossum<span class="sc">$</span>lat  <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>, <span class="st">"."</span>, dados_ameroglossum<span class="sc">$</span>lat))</span>
+<span id="cb114-57"><a href="#cb114-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb114-58"><a href="#cb114-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-59"><a href="#cb114-59" aria-hidden="true" tabindex="-1"></a>Aqui, carregamos as variáveis bioclimáticas que farão parte do teste, junto à variável de elevação, todas fornecidas pelo WorldClim. </span>
+<span id="cb114-60"><a href="#cb114-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-61"><a href="#cb114-61" aria-hidden="true" tabindex="-1"></a>São elas: </span>
+<span id="cb114-62"><a href="#cb114-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-63"><a href="#cb114-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-64"><a href="#cb114-64" aria-hidden="true" tabindex="-1"></a>BIO1 = Temperatura média anual</span>
+<span id="cb114-65"><a href="#cb114-65" aria-hidden="true" tabindex="-1"></a>BIO4 = Sazonalidade da temperatura (desvio padrão × 100)</span>
+<span id="cb114-66"><a href="#cb114-66" aria-hidden="true" tabindex="-1"></a>BIO7 = Amplitude térmica anual (BIO5-BIO6)</span>
+<span id="cb114-67"><a href="#cb114-67" aria-hidden="true" tabindex="-1"></a>BIO12 = Precipitação Anual</span>
+<span id="cb114-68"><a href="#cb114-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-69"><a href="#cb114-69" aria-hidden="true" tabindex="-1"></a>Todos são entregues como arquivos geotif (raster). A resolução utilizada foi a menor, de 10minutos. Não é necessário uma resolução maior para um teste de script.</span>
+<span id="cb114-70"><a href="#cb114-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-73"><a href="#cb114-73" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb114-74"><a href="#cb114-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Definindo variáveis (raster's definidos)</span></span>
+<span id="cb114-75"><a href="#cb114-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-76"><a href="#cb114-76" aria-hidden="true" tabindex="-1"></a>bio1 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_1.tif"</span>)</span>
+<span id="cb114-77"><a href="#cb114-77" aria-hidden="true" tabindex="-1"></a>bio4 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_4.tif"</span>)</span>
+<span id="cb114-78"><a href="#cb114-78" aria-hidden="true" tabindex="-1"></a>bio7 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_7.tif"</span>)</span>
+<span id="cb114-79"><a href="#cb114-79" aria-hidden="true" tabindex="-1"></a>bio12 <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_bio_12.tif"</span>)</span>
+<span id="cb114-80"><a href="#cb114-80" aria-hidden="true" tabindex="-1"></a>elev <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"wc2.1_10m_elev.tif"</span>)</span>
+<span id="cb114-81"><a href="#cb114-81" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb114-82"><a href="#cb114-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-83"><a href="#cb114-83" aria-hidden="true" tabindex="-1"></a>Aqui definimos quantas pseudoausências serão calculadas, quantas repetições serão feitas e definimos a estratégia como aleatória para o cálculo de pseudoausências.</span>
+<span id="cb114-84"><a href="#cb114-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-85"><a href="#cb114-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-86"><a href="#cb114-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-89"><a href="#cb114-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb114-90"><a href="#cb114-90" aria-hidden="true" tabindex="-1"></a><span class="co">#Psudoausências</span></span>
+<span id="cb114-91"><a href="#cb114-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-92"><a href="#cb114-92" aria-hidden="true" tabindex="-1"></a>PA.nb.rep <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb114-93"><a href="#cb114-93" aria-hidden="true" tabindex="-1"></a>PA.nb.absences <span class="ot">=</span> <span class="dv">3000</span></span>
+<span id="cb114-94"><a href="#cb114-94" aria-hidden="true" tabindex="-1"></a>PA.strategy <span class="ot">=</span> <span class="st">"random"</span></span>
+<span id="cb114-95"><a href="#cb114-95" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb114-96"><a href="#cb114-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-97"><a href="#cb114-97" aria-hidden="true" tabindex="-1"></a>Aqui vamos definir os objetos</span>
+<span id="cb114-98"><a href="#cb114-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-101"><a href="#cb114-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb114-102"><a href="#cb114-102" aria-hidden="true" tabindex="-1"></a><span class="co"># Resp.var e Resp.xy (Objetos de presença e localidade)</span></span>
+<span id="cb114-103"><a href="#cb114-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-104"><a href="#cb114-104" aria-hidden="true" tabindex="-1"></a>resp.var <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">nrow</span>(dados_ameroglossum))</span>
+<span id="cb114-105"><a href="#cb114-105" aria-hidden="true" tabindex="-1"></a>resp.xy <span class="ot">&lt;-</span> dados_ameroglossum[,<span class="fu">c</span>(<span class="st">"long"</span>,<span class="st">"lat"</span>)]</span>
+<span id="cb114-106"><a href="#cb114-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-107"><a href="#cb114-107" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenando variáveis</span></span>
+<span id="cb114-108"><a href="#cb114-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-109"><a href="#cb114-109" aria-hidden="true" tabindex="-1"></a>variaveis <span class="ot">&lt;-</span> <span class="fu">c</span>(bio1, bio4, bio7, bio12, elev)</span>
+<span id="cb114-110"><a href="#cb114-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-111"><a href="#cb114-111" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando objeto de teste</span></span>
+<span id="cb114-112"><a href="#cb114-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-113"><a href="#cb114-113" aria-hidden="true" tabindex="-1"></a>testebio24 <span class="ot">&lt;-</span> <span class="fu">BIOMOD_FormatingData</span>(</span>
+<span id="cb114-114"><a href="#cb114-114" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.var =</span> resp.var,</span>
+<span id="cb114-115"><a href="#cb114-115" aria-hidden="true" tabindex="-1"></a>  <span class="at">expl.var =</span> variaveis,</span>
+<span id="cb114-116"><a href="#cb114-116" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.xy =</span> resp.xy,</span>
+<span id="cb114-117"><a href="#cb114-117" aria-hidden="true" tabindex="-1"></a>  <span class="at">resp.name =</span> <span class="st">"A.Pernambucense teste 2"</span>,</span>
+<span id="cb114-118"><a href="#cb114-118" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.nb.rep =</span> <span class="dv">3</span>,</span>
+<span id="cb114-119"><a href="#cb114-119" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.nb.absences =</span> <span class="dv">3000</span>,</span>
+<span id="cb114-120"><a href="#cb114-120" aria-hidden="true" tabindex="-1"></a>  <span class="at">PA.strategy =</span> <span class="st">"random"</span>,</span>
+<span id="cb114-121"><a href="#cb114-121" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb114-122"><a href="#cb114-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-123"><a href="#cb114-123" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelando com GLM, GAM, RF e MaxEnt</span></span>
+<span id="cb114-124"><a href="#cb114-124" aria-hidden="true" tabindex="-1"></a>testebio24_glm <span class="ot">&lt;-</span> <span class="fu">BIOMOD_Modeling</span>(</span>
+<span id="cb114-125"><a href="#cb114-125" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.format=</span>testebio24,</span>
+<span id="cb114-126"><a href="#cb114-126" aria-hidden="true" tabindex="-1"></a>  <span class="at">modeling.id =</span> <span class="st">"teste 1, 4, 7, 12, elev"</span>,</span>
+<span id="cb114-127"><a href="#cb114-127" aria-hidden="true" tabindex="-1"></a>  <span class="at">models =</span> <span class="fu">c</span>(<span class="st">"GLM"</span>, <span class="st">"GAM"</span>, <span class="st">"RF"</span>, <span class="st">"MAXNET"</span>),</span>
+<span id="cb114-128"><a href="#cb114-128" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.strategy =</span> <span class="st">"random"</span>,</span>
+<span id="cb114-129"><a href="#cb114-129" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.nb.rep =</span> <span class="dv">3</span>,</span>
+<span id="cb114-130"><a href="#cb114-130" aria-hidden="true" tabindex="-1"></a>  <span class="at">CV.perc =</span> <span class="fl">0.75</span>,</span>
+<span id="cb114-131"><a href="#cb114-131" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.eval =</span> <span class="fu">c</span> (<span class="st">"TSS"</span>, <span class="st">"AUCroc"</span>, <span class="st">"AUCprg"</span>),</span>
+<span id="cb114-132"><a href="#cb114-132" aria-hidden="true" tabindex="-1"></a>  <span class="at">var.import =</span> <span class="dv">10</span></span>
+<span id="cb114-133"><a href="#cb114-133" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb114-134"><a href="#cb114-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-135"><a href="#cb114-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-136"><a href="#cb114-136" aria-hidden="true" tabindex="-1"></a><span class="co"># Vendo os resultados</span></span>
+<span id="cb114-137"><a href="#cb114-137" aria-hidden="true" tabindex="-1"></a><span class="fu">get_evaluations</span>(testebio24_glm)</span>
+<span id="cb114-138"><a href="#cb114-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-139"><a href="#cb114-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-140"><a href="#cb114-140" aria-hidden="true" tabindex="-1"></a><span class="co"># Projetando dados</span></span>
+<span id="cb114-141"><a href="#cb114-141" aria-hidden="true" tabindex="-1"></a>bio24_projecao <span class="ot">&lt;-</span> <span class="fu">BIOMOD_Projection</span>(</span>
+<span id="cb114-142"><a href="#cb114-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.mod =</span> testebio24_glm,</span>
+<span id="cb114-143"><a href="#cb114-143" aria-hidden="true" tabindex="-1"></a>  <span class="at">proj.name =</span> <span class="st">"bio24_teste 2"</span>,</span>
+<span id="cb114-144"><a href="#cb114-144" aria-hidden="true" tabindex="-1"></a>  <span class="at">new.env =</span> variaveis,</span>
+<span id="cb114-145"><a href="#cb114-145" aria-hidden="true" tabindex="-1"></a>  <span class="at">models.chosen =</span> <span class="st">"all"</span>,</span>
+<span id="cb114-146"><a href="#cb114-146" aria-hidden="true" tabindex="-1"></a>  <span class="at">output.format =</span> <span class="st">".tif"</span></span>
+<span id="cb114-147"><a href="#cb114-147" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb114-148"><a href="#cb114-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-149"><a href="#cb114-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-150"><a href="#cb114-150" aria-hidden="true" tabindex="-1"></a>bio24_projecao</span>
+<span id="cb114-151"><a href="#cb114-151" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixando objeto de predição </span></span>
+<span id="cb114-152"><a href="#cb114-152" aria-hidden="true" tabindex="-1"></a><span class="do">## Encontrando objetos</span></span>
+<span id="cb114-153"><a href="#cb114-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-154"><a href="#cb114-154" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(</span>
+<span id="cb114-155"><a href="#cb114-155" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/"</span>,</span>
+<span id="cb114-156"><a href="#cb114-156" aria-hidden="true" tabindex="-1"></a>  <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb114-157"><a href="#cb114-157" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
+<span id="cb114-158"><a href="#cb114-158" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb114-159"><a href="#cb114-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-160"><a href="#cb114-160" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixando Raster</span></span>
+<span id="cb114-161"><a href="#cb114-161" aria-hidden="true" tabindex="-1"></a>predicaorastbio24 <span class="ot">&lt;-</span> <span class="fu">rast</span>(</span>
+<span id="cb114-162"><a href="#cb114-162" aria-hidden="true" tabindex="-1"></a>  <span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2.tif"</span></span>
+<span id="cb114-163"><a href="#cb114-163" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb114-164"><a href="#cb114-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-165"><a href="#cb114-165" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotando</span></span>
+<span id="cb114-166"><a href="#cb114-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-167"><a href="#cb114-167" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(predicaorastbio24)</span>
+<span id="cb114-168"><a href="#cb114-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-169"><a href="#cb114-169" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotando de forma decente</span></span>
+<span id="cb114-170"><a href="#cb114-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-171"><a href="#cb114-171" aria-hidden="true" tabindex="-1"></a><span class="do">## tentando criar um consenso binário</span></span>
+<span id="cb114-172"><a href="#cb114-172" aria-hidden="true" tabindex="-1"></a>binario <span class="ot">&lt;-</span> predicaorastbio24 <span class="sc">&gt;=</span> <span class="dv">700</span></span>
+<span id="cb114-173"><a href="#cb114-173" aria-hidden="true" tabindex="-1"></a>consenso <span class="ot">&lt;-</span> <span class="fu">app</span>(binario, mean)</span>
+<span id="cb114-174"><a href="#cb114-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-175"><a href="#cb114-175" aria-hidden="true" tabindex="-1"></a><span class="do">##plotando</span></span>
+<span id="cb114-176"><a href="#cb114-176" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(consenso)</span>
+<span id="cb114-177"><a href="#cb114-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-178"><a href="#cb114-178" aria-hidden="true" tabindex="-1"></a><span class="co"># Utilizando o EssembleModeling</span></span>
+<span id="cb114-179"><a href="#cb114-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-180"><a href="#cb114-180" aria-hidden="true" tabindex="-1"></a><span class="fu">BIOMOD_EnsembleModeling</span>(testebio24_glm)</span>
+<span id="cb114-181"><a href="#cb114-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-182"><a href="#cb114-182" aria-hidden="true" tabindex="-1"></a>ensemble <span class="ot">&lt;-</span> <span class="fu">BIOMOD_EnsembleModeling</span>(</span>
+<span id="cb114-183"><a href="#cb114-183" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.mod =</span> testebio24_glm,</span>
+<span id="cb114-184"><a href="#cb114-184" aria-hidden="true" tabindex="-1"></a>  <span class="at">em.by =</span> <span class="st">"all"</span>,</span>
+<span id="cb114-185"><a href="#cb114-185" aria-hidden="true" tabindex="-1"></a>  <span class="at">em.algo =</span> <span class="fu">c</span>(<span class="st">"EMmean"</span>),</span>
+<span id="cb114-186"><a href="#cb114-186" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.select =</span> <span class="st">"TSS"</span>,</span>
+<span id="cb114-187"><a href="#cb114-187" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.select.thresh =</span> <span class="fl">0.7</span>,</span>
+<span id="cb114-188"><a href="#cb114-188" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric.eval =</span> <span class="fu">c</span>(<span class="st">"TSS"</span>, <span class="st">"AUCroc"</span>)</span>
+<span id="cb114-189"><a href="#cb114-189" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb114-190"><a href="#cb114-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-191"><a href="#cb114-191" aria-hidden="true" tabindex="-1"></a>ensemble_proj <span class="ot">&lt;-</span> <span class="fu">BIOMOD_EnsembleForecasting</span>(</span>
+<span id="cb114-192"><a href="#cb114-192" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.em =</span> ensemble,</span>
+<span id="cb114-193"><a href="#cb114-193" aria-hidden="true" tabindex="-1"></a>  <span class="at">bm.proj =</span> bio24_projecao,</span>
+<span id="cb114-194"><a href="#cb114-194" aria-hidden="true" tabindex="-1"></a>  <span class="at">models.chosen =</span> <span class="st">"all"</span></span>
+<span id="cb114-195"><a href="#cb114-195" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb114-196"><a href="#cb114-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-197"><a href="#cb114-197" aria-hidden="true" tabindex="-1"></a><span class="do">### Plotando (finalmente)</span></span>
+<span id="cb114-198"><a href="#cb114-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-199"><a href="#cb114-199" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(</span>
+<span id="cb114-200"><a href="#cb114-200" aria-hidden="true" tabindex="-1"></a>  <span class="at">recursive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb114-201"><a href="#cb114-201" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"ensemble|EM|tif"</span>,</span>
+<span id="cb114-202"><a href="#cb114-202" aria-hidden="true" tabindex="-1"></a>  <span class="at">full.names =</span> <span class="cn">TRUE</span></span>
+<span id="cb114-203"><a href="#cb114-203" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb114-204"><a href="#cb114-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-205"><a href="#cb114-205" aria-hidden="true" tabindex="-1"></a>ensemble_raster <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"A.Pernambucense.teste.2/proj_bio24_teste 2/proj_bio24_teste 2_A.Pernambucense.teste.2_ensemble.tif"</span>)</span>
+<span id="cb114-206"><a href="#cb114-206" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ensemble_raster)</span>
+<span id="cb114-207"><a href="#cb114-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-208"><a href="#cb114-208" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
