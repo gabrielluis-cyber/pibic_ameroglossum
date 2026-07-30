@@ -11,10 +11,15 @@ format:
     code-copy: true
 ---
 
+
+Inicialmente, precisamos carregar os pacotes requeridos:
+
 ```{r}
 
 1 + 1
+```
 
+``` {r}
 library("terra")
 library("sf")
 library("landscapemetrics")
@@ -34,12 +39,33 @@ library("maxnet")
 
 setwd("C:/faculdade/Teste_biomod2_parte_2")
 
+```
+
+Devido ao excel/sheets trabalharem com ","; se torn necessário um passo extra: 
+
+Trocar as vírgulas por pontos na tabela
+
+```{r}
 # Dados em CSV e troca de "," para "."
 
 dados_ameroglossum <- read.csv("ameroglossum.csv")
 dados_ameroglossum$long <- as.numeric(gsub(",", ".", dados_ameroglossum$long))
 dados_ameroglossum$lat  <- as.numeric(gsub(",", ".", dados_ameroglossum$lat))
+```
 
+Aqui, carregamos as variáveis bioclimáticas que farão parte do teste, junto à variável de elevação, todas fornecidas pelo WorldClim. 
+
+São elas: 
+
+
+BIO1 = Temperatura média anual
+BIO4 = Sazonalidade da temperatura (desvio padrão × 100)
+BIO7 = Amplitude térmica anual (BIO5-BIO6)
+BIO12 = Precipitação Anual
+
+Todos são entregues como arquivos geotif (raster). A resolução utilizada foi a menor, de 10minutos. Não é necessário uma resolução maior para um teste de script.
+
+```{r}
 # Definindo variáveis (raster's definidos)
 
 bio1 <- rast("wc2.1_10m_bio_1.tif")
@@ -47,13 +73,23 @@ bio4 <- rast("wc2.1_10m_bio_4.tif")
 bio7 <- rast("wc2.1_10m_bio_7.tif")
 bio12 <- rast("wc2.1_10m_bio_12.tif")
 elev <- rast("wc2.1_10m_elev.tif")
+```
 
+Aqui definimos quantas pseudoausências serão calculadas, quantas repetições serão feitas e definimos a estratégia como aleatória para o cálculo de pseudoausências.
+
+
+
+```{r}
 #Psudoausências
 
 PA.nb.rep = 3
 PA.nb.absences = 3000
 PA.strategy = "random"
+```
 
+Aqui vamos definir os objetos
+
+```{r}
 # Resp.var e Resp.xy (Objetos de presença e localidade)
 
 resp.var <- rep(1,nrow(dados_ameroglossum))
